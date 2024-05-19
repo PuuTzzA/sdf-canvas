@@ -73,12 +73,12 @@ class Sketch {
         this.material.uniforms.time.value = elapsed;
         this.renderer.render(this.scene, this.camera);
 
-/*         let material = new THREE.ShaderMaterial({
-            fragmentShader: fragment + "gl_FragColor = vec4(vec3( col ), 1.);}",
-            vertexShader: vertex,
-            uniforms: this.uniforms
-        });
-        this.mesh.material = material; */
+        /*         let material = new THREE.ShaderMaterial({
+                    fragmentShader: fragment + "gl_FragColor = vec4(vec3( col ), 1.);}",
+                    vertexShader: vertex,
+                    uniforms: this.uniforms
+                });
+                this.mesh.material = material; */
 
         window.requestAnimationFrame(this.render.bind(this));
     }
