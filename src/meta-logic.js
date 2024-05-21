@@ -99,8 +99,12 @@ export class ColorStop {
 }
 
 export class ColorRamp {
-    constructor() {
-        this.colorStops = [];
+    constructor(colorRamp) {
+        if (colorRamp == undefined) {
+            this.colorStops = [];
+        } else {
+            this.colorStops = colorRamp;
+        }
     }
 
     static toEquallySpaced(colors) {
@@ -118,7 +122,7 @@ export class ColorRamp {
 }
 
 export class MetaCanvas {
-    constructor({ smoothRadius = 15, gain = 2, contrast = 0.1, steps = 5, colorRamp = ColorRamp.toEquallySpaced([new THREE.Color("black"), new THREE.Color(0, 1, 0), new THREE.Color("white")]) }) {
+    constructor({ smoothRadius = 15, gain = 0, contrast = 0.1, steps = 5, colorRamp = ColorRamp.toEquallySpaced([new THREE.Color("black"), new THREE.Color("white")]) }) {
         this.container = document.getElementById("meta-container");
         this.smoothRadius = smoothRadius;
         this.gain = gain;
@@ -368,8 +372,6 @@ void main() {
         this.colorRamp = colorRamp;
         this.buildMain(colorRamp);
 
-        console.log(this.fragment_first + this.fragment_sdf + this.fragment_main);
-
         const uniforms = {
             resolution: { type: "vec2", value: new THREE.Vector2() },
             time: { type: "float", value: 0 },
@@ -385,7 +387,7 @@ void main() {
             vertexShader: this.vertex,
             uniforms: uniforms,
         });
-        
+
         this.mesh.material = this.material;
         this.resize();
     }

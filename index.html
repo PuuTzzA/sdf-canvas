@@ -10,6 +10,34 @@
 </head>
 
 <body>
+    <div class="container-sliders">
+        <div class="slider">
+            <div>
+                <span>smoothRadius</span><span class="slider-value" id="sRt">250</span>
+            </div>
+            <input type="range" min="1" max="500" value="250" id="sR">
+        </div>
+        <div class="slider">
+            <div>
+                <span>gain</span><span class="slider-value" id="gt">0</span>
+            </div>
+            <input type="range" min="-25" max="25" value="0" step="0.05" id="g">
+        </div>
+        <div class="slider">
+            <div>
+                <span>contrast</span><span class="slider-value" id="ct">0.1</span>
+            </div>
+            <input type="range" min="-0.5" max="0.5" value="0.1" step="0.001" id="c">
+        </div>
+        <div class="slider">
+            <div>
+                <span>steps</span><span class="slider-value" id="st">500</span>
+            </div>
+            <input type="range" min="2" max="500" value="500" id="s">
+        </div>
+        <button id="colors">Change colors</button>
+    </div>
+
     <div id="container">
         <div class="meta-box" id="test-box"></div>
         <div class="meta-box-rounded" r="22.5" id="test-box-2"></div>
