@@ -8,6 +8,10 @@ body {
 }
 
 #container {
+    position: absolute;
+    z-index: -10;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
@@ -15,4 +19,44 @@ body {
 
 canvas {
     display: block;
+}
+
+#test-box {
+    background-color: rgba(255, 0, 0, 0.288);
+    width: 10rem;
+    height: 20rem;
+
+    position: absolute;
+    top: 10px;
+    left: 10%;
+}
+
+#test-box-2 {
+    background-color: rgba(255, 0, 0, 0.288);
+    width: 10rem;
+    height: 20rem;
+
+    position: absolute;
+    right: 20%;
+    bottom: 10%;
+}
+
+#test-text{
+    font-size: 1000px;
+    margin-left: 50%;
+    margin-top: 10rem;
+}
+
+
+@font-face {
+    font-family: metaballs;
+    src: url(fonts/metaball_font_.ttf);
+}
+
+.meta-text{
+    font-family: metaballs;
+    white-space: nowrap;
+    width: max-content;
+    color: rgba(255, 0, 0, 0.308);
+    vertical-align: baseline;
 }

@@ -1,7 +1,6 @@
-uniform vec4 resolution;
-uniform float time;
-uniform sampler2D matcap;
+uniform vec2 resolution;
 uniform vec2 mouse;
+
 varying vec2 vUv;
 
 // stammfunktionen
@@ -255,28 +254,22 @@ float sdCross(vec2 p) {
     return bar2;
 }
 
-float sdfTotal(vec2 p) {
+/* float sdfTotal(vec2 p) {
     float t = 3.1415 / 1.5;
-    vec2 mousevec = p - scale * vec2(mouse * resolution.zw);
-    float cursor = sdCross(mousevec);
-    cursor = sdu(mousevec);
+    vec2 mousevec = (p - vec2(array[0], array[1]));
+    float cursor = sdCross(mousevec * 2.);
 
-    float test = sdz(p);
 
-    float sdf = smin(cursor, test, d);
-    sdf = min(test, cursor);
-    sdf = smin(test, cursor, d / 4.);
-    return sdf;
-}
 
-void main() {
-    float res = 600.;
-    vec2 pos = floor((res * (vUv - vec2(0.5))) * resolution.zw) / res;
-    pos = scale * (vUv - vec2(0.5)) * resolution.zw;
-    float col = 1.;
+    return cursor;
+} */
 
-    if(sdfTotal(pos) > 0.) {
-        col = 0.;
+/* void main() {
+    vec2 pos = resolution * (vUv * vec2(1., -1.) + vec2(0., 1.));
+    gl_FragColor = vec4(vec3(0.), 1.);
+
+
+    if(sdfTotal(pos) < 0.) {
+        gl_FragColor = vec4(vec3(1.), 1.);
     }
-    gl_FragColor = vec4(vec3(col), 1.);
-}
+} */
