@@ -24,15 +24,15 @@
      inkscape:deskcolor="#000000"
      inkscape:document-units="px"
      showgrid="false"
-     inkscape:zoom="1.2384029"
-     inkscape:cx="217.21526"
-     inkscape:cy="729.97248"
+     inkscape:zoom="8.0240319"
+     inkscape:cx="13.334942"
+     inkscape:cy="773.67588"
      inkscape:window-width="1920"
      inkscape:window-height="1058"
      inkscape:window-x="389"
      inkscape:window-y="-6"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer115"
+     inkscape:current-layer="layer77"
      inkscape:lockguides="false"
      showguides="true">
     <sodipodi:guide
@@ -460,7 +460,7 @@
          glyph-name="f"
          unicode="f"
          id="glyph215"
-         d="M 67.5,900 A 67.5,67.5 0 0 1 0,832.5 v -65 A 22.5,22.5 0 0 0 -22.5,745 22.5,22.5 0 0 1 -45,722.5 22.5,22.5 0 0 1 -22.5,700 22.5,22.5 0 0 0 0,677.5 v -455 A 22.5,22.5 0 0 1 22.5,200 22.5,22.5 0 0 1 45,222.5 v 455 A 22.5,22.5 0 0 0 67.5,700 H 90 A 22.5,22.5 0 0 1 112.49999,722.5 22.5,22.5 0 0 1 90,745 H 67.5 A 22.5,22.5 0 0 0 45,767.5 v 65 A 22.5,22.5 0 0 0 67.5,855 22.5,22.5 0 0 0 90,832.5 V 810 a 22.5,22.5 0 0 1 22.49999,-22.5 22.5,22.5 0 0 1 22.5,22.5 v 22.5 A 67.5,67.5 0 0 1 67.5,900 Z"
+         d="m 67.5,900.00003 a 67.5,67.5 0 0 1 -67.5,-67.5 v -65 a 22.5,22.5 0 0 0 -22.5,-22.5 22.5,22.5 0 0 1 -22.5,-22.5 22.5,22.5 0 0 1 22.5,-22.5 22.5,22.5 0 0 0 22.5,-22.5 v -455 a 22.5,22.5 0 0 1 22.5,-22.5 22.5,22.5 0 0 1 22.5,22.5 v 455 a 22.5,22.5 0 0 0 22.5,22.5 H 90 a 22.5,22.5 0 0 1 22.5,22.5 22.5,22.5 0 0 1 -22.5,22.5 H 67.5 a 22.5,22.5 0 0 0 -22.5,22.5 v 65 a 22.5,22.5 0 0 0 22.5,22.5 22.5,22.5 0 0 0 22.5,-22.5 v -22.5 a 22.5,22.5 0 0 1 22.5,-22.5 22.5,22.5 0 0 1 22.5,22.5 v 22.5 a 67.5,67.5 0 0 1 -67.5,67.5 z"
          horiz-adv-x="90" />
       <glyph
          glyph-name="g"
@@ -1093,8 +1093,7 @@
      inkscape:label="building_blocks"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="fill:#0000ff;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
        id="rect163"
@@ -1155,18 +1154,10 @@
       <circle
          style="display:inline;fill:#ffff00;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
          id="circle261"
-         cx="-1160.3245"
+         cx="-1160.3243"
          cy="-1324.3397"
-         r="22.5"
-         transform="matrix(0,1,1,0,0,0)" />
-      <rect
-         style="display:inline;fill:#ffffff;stroke:none;stroke-width:4.99999;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
-         id="rect260"
-         width="45"
-         height="22.5"
-         x="1137.8245"
-         y="1324.3397"
-         transform="matrix(0,-1,-1,0,0,0)" />
+         transform="matrix(0,1,1,0,0,0)"
+         r="22.5" />
       <rect
          style="display:inline;fill:#ffffff;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
          id="rect17"
@@ -9406,6 +9397,13 @@
          style="fill:#ff00ff;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
          id="path15"
          d="m -1482.9549,-1187.1412 c -0.5073,1.3439 -1.0425,2.6775 -1.5219,4.0316 -3.3534,9.4714 -2.0618,6.9334 -6.7008,18.4733 -6.2394,15.5211 -13.4743,30.6499 -20.2548,45.9375 -11.8911,27.3336 -22.2252,55.3993 -30.5333,84.0369 -1.5292,5.2711 -2.8691,10.5953 -4.3037,15.8929 -8.0715,30.61724 -12.661,61.97182 -16.878,93.3045 -3.5891,29.40199 -7.1453,58.80591 -9.8411,88.30513 -1.9265,24.22373 -4.5289,48.37873 -7.9227,72.43923 -1.9156,12.90972 -3.315,25.89378 -4.5424,38.88511 -0.5782,6.12016 -1.6886,18.506 -1.811,24.77747 -0.077,3.96063 0.1576,7.92119 0.2363,11.88179 0.4585,9.7689 1.8699,19.44315 4.2323,28.92852 1.6862,6.77002 3.8932,13.42416 5.7891,20.13783 0.4664,1.84171 0.9329,3.68342 1.3993,5.52513 0,0 12.6668,6.05127 12.6668,6.05127 v 0 c -0.5045,-1.87258 -1.0091,-3.74516 -1.5136,-5.61774 -4.7429,-16.16562 -10.5564,-32.14143 -11.0702,-49.19755 -0.1064,-3.93802 -0.3603,-7.87482 -0.3192,-11.81406 0.2226,-21.31946 3.6037,-42.50586 6.2054,-63.61195 3.4539,-24.09614 6.4367,-48.24084 7.848,-72.55676 2.4269,-29.55977 5.6757,-59.03363 9.4306,-88.45421 4.1943,-31.30417 8.7345,-62.62217 16.6645,-93.24241 1.4048,-5.2979 2.7165,-10.6213 4.2144,-15.8937 8.1392,-28.6495 18.1308,-56.811 30.2817,-84.0059 8.6387,-18.9226 17.8173,-37.5968 26.3818,-56.5524 0.9858,-2.1818 1.8285,-4.4265 2.8215,-6.6051 0.5794,-1.271 1.2622,-2.4924 1.8933,-3.7385 z" />
+      <rect
+         style="fill:#00ff00;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
+         id="rect7"
+         width="22.499979"
+         height="44.999939"
+         x="-1346.8397"
+         y="-1182.8243" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -14321,15 +14319,14 @@
        inkscape:groupmode="layer"
        id="layer77"
        inkscape:label="U+000066 f f"
-       style="display:none"
-       sodipodi:insensitive="true">
+       style="display:inline">
       <path
          d=""
          id="path627" />
       <path
-         id="circle627"
-         style="display:inline;fill:#f9f9f9;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
-         d="M 67.5,124 A 67.5,67.5 0 0 0 0,191.5 v 65 A 22.5,22.5 0 0 1 -22.5,279 22.5,22.5 0 0 0 -45,301.5 22.5,22.5 0 0 0 -22.5,324 22.5,22.5 0 0 1 0,346.5 v 455 A 22.5,22.5 0 0 0 22.5,824 22.5,22.5 0 0 0 45,801.5 v -455 A 22.5,22.5 0 0 1 67.5,324 H 90 A 22.5,22.5 0 0 0 112.49999,301.5 22.5,22.5 0 0 0 90,279 H 67.5 A 22.5,22.5 0 0 1 45,256.5 v -65 A 22.5,22.5 0 0 1 67.5,169 22.5,22.5 0 0 1 90,191.5 V 214 a 22.5,22.5 0 0 0 22.49999,22.5 22.5,22.5 0 0 0 22.5,-22.5 V 191.5 A 67.5,67.5 0 0 0 67.5,124 Z" />
+         id="circle43"
+         style="display:inline;fill:#ffffff;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke markers fill"
+         d="m 67.5,123.99997 a 67.5,67.5 0 0 0 -67.5,67.5 v 65 a 22.5,22.5 0 0 1 -22.5,22.5 22.5,22.5 0 0 0 -22.5,22.5 22.5,22.5 0 0 0 22.5,22.5 22.5,22.5 0 0 1 22.5,22.5 v 455 a 22.5,22.5 0 0 0 22.5,22.5 22.5,22.5 0 0 0 22.5,-22.5 v -455 a 22.5,22.5 0 0 1 22.5,-22.5 H 90 a 22.5,22.5 0 0 0 22.5,-22.5 22.5,22.5 0 0 0 -22.5,-22.5 H 67.5 a 22.5,22.5 0 0 1 -22.5,-22.5 v -65 a 22.5,22.5 0 0 1 22.5,-22.5 22.5,22.5 0 0 1 22.5,22.5 v 22.5 a 22.5,22.5 0 0 0 22.5,22.5 22.5,22.5 0 0 0 22.5,-22.5 v -22.5 a 67.5,67.5 0 0 0 -67.5,-67.5 z" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -15625,7 +15622,8 @@
        inkscape:groupmode="layer"
        id="layer115"
        inkscape:label="U+000028 U+00006A (j parentheses_j"
-       style="display:inline">
+       style="display:none"
+       sodipodi:insensitive="true">
       <path
          d=""
          id="path565" />

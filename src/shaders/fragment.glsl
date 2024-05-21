@@ -1,6 +1,5 @@
 uniform vec2 resolution;
-uniform vec2 mouse;
-
+uniform float smoothRadius;
 varying vec2 vUv;
 
 // stammfunktionen
@@ -87,7 +86,7 @@ float sdf(in vec2 p) {
     float f = sdRoundedBox(p + vec2(d / 2., -632.5 / 2.), vec2(d / 2., 632.5 / 2.), vec4(0., d / 2., 0., d / 2.)); // rectangle
     f = min(sdRing(p + vec2(d * 1.5, -632.5), vec2(cos(pi / 2.), sin(pi / 2.)), d, d), f); // ring top
     f = min(sdRoundedBox(p + vec2(d * 2.5, -632.5 + d / 2.), vec2(d / 2., d / 2.), vec4(0., d / 2., 0., d / 2.)), f); // box bottom
-    f = smin(sdRoundedBox(p + vec2(157.5 / 2. - d, -545. + d / 2.), vec2(157.5 / 2., d / 2.), vec4(d / 2.)), f, d / 8.); // crossbar
+    f = smin(sdRoundedBox(p + vec2(d * 1.5 - d, -545. + d / 2.), vec2(d * 1.5, d / 2.), vec4(d / 2.)), f, d / 8.); // crossbar
     return f;
 }
 
@@ -246,12 +245,4 @@ float sdz(in vec2 p) {
 
 float sdNotDefined(in vec2 p) {
     return sdRoundedBox(p + vec2(d * 1.5, -350.), vec2(d * 1.5, 350.), vec4(d / 2.));
-}
-
-// testing
-float sdCross(vec2 p) {
-    float bar1 = sdRoundedBox(p, vec2(5. * d / 2., d / 2.), vec4(d / 2.));
-    float bar2 = sdRoundedBox(p, vec2(d / 2., 5. * d / 2.), vec4(d / 2.));
-    bar2 = smin(bar1, bar2, d / 8.);
-    return bar2;
 }

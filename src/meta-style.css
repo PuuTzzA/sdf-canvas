@@ -1,0 +1,52 @@
+:root {
+    --color-debug: rgba(255, 0, 0, 0.2);
+}
+
+@font-face {
+    font-family: metaballs;
+    src: url(fonts/metaball_font_big.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#meta-container {
+    position: fixed;
+    z-index: -10;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#meta-container > canvas {
+    display: block;
+}
+
+.meta-text {
+    font-family: metaballs;
+    white-space: nowrap;
+    width: max-content;
+    vertical-align: baseline;
+    color: transparent;
+}
+
+.meta-box, .meta-box-rounded, .meta-circle {
+    background-color: transparent;
+}
+
+.meta-debug.meta-box, .meta-debug.meta-box-rounded {
+    background-color: var(--color-debug) !important;
+}
+
+.meta-debug.meta-circle{
+    background-color: var(--color-debug) !important;
+    border-radius: 50%;
+}
+
+.meta-debug.meta-text{
+    color: var(--color-debug) !important;
+}
