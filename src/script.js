@@ -3,14 +3,27 @@ let vertex, fragment;
 
 let fragment_main = `
 void main() {
+    const vec2 subPixleOffsets[] = vec2[](
+        vec2(0.375,0.125)-vec2(0.5),
+        vec2(0.875,0.375)-vec2(0.5),
+        vec2(0.125,0.625)-vec2(0.5),
+        vec2(0.625,0.875)-vec2(0.5)
+    );
+    vec2 pixelSize = vec2(1.) / resolution;
+
+    float sdfSum = 0.;
     vec2 pos = resolution * (vUv * vec2(1., -1.) + vec2(0., 1.));
-    pos = resolution * (vUv * vec2(1., -1.) + vec2(0., 1.));
-    gl_FragColor = vec4(vec3(0.), 1.);
+    vec2 posOffset;
 
-
-    if(sdfTotal(pos) < 0.) {
-        gl_FragColor = vec4(vec3(1.), 1.);
+    for (int i = 0; i < subPixleOffsets.length(); i++) {
+        posOffset = pos + subPixleOffsets[i] * pixelSize;
+        sdfSum += sdfTotal(posOffset);
     }
+
+    sdfSum /= float(subPixleOffsets.length());
+    sdfSum *= 2.;
+
+    gl_FragColor = mix(vec4(vec3(1.), 1.), vec4(vec3(0.), 1.), sdfSum);
 }`;
 
 // JavaScript code in your-script.js

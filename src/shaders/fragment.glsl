@@ -249,31 +249,9 @@ float sdNotDefined(in vec2 p) {
 }
 
 // testing
-const vec2 scale = 3500. * vec2(-1., 1.);
-
 float sdCross(vec2 p) {
     float bar1 = sdRoundedBox(p, vec2(5. * d / 2., d / 2.), vec4(d / 2.));
     float bar2 = sdRoundedBox(p, vec2(d / 2., 5. * d / 2.), vec4(d / 2.));
     bar2 = smin(bar1, bar2, d / 8.);
     return bar2;
 }
-
-/* float sdfTotal(vec2 p) {
-    float t = 3.1415 / 1.5;
-    vec2 mousevec = (p - vec2(array[0], array[1]));
-    float cursor = sdCross(mousevec * 2.);
-
-
-
-    return cursor;
-} */
-
-/* void main() {
-    vec2 pos = resolution * (vUv * vec2(1., -1.) + vec2(0., 1.));
-    gl_FragColor = vec4(vec3(0.), 1.);
-
-
-    if(sdfTotal(pos) < 0.) {
-        gl_FragColor = vec4(vec3(1.), 1.);
-    }
-} */
