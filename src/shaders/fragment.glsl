@@ -1,5 +1,8 @@
 uniform vec2 resolution;
 uniform float smoothRadius;
+uniform float gain;
+uniform float contrast;
+uniform float steps;
 varying vec2 vUv;
 
 // stammfunktionen
@@ -39,6 +42,25 @@ float sdRing(in vec2 p, in vec2 n, in float r, float th) {
 
     return max(abs(length(p) - r) - th * 0.5, length(vec2(p.x, max(0.0, abs(r - p.y) - th * 0.5))) * sign(p.x));
 }
+
+struct ColorStop {
+    vec3 color;
+    float position;
+};
+
+#define COLOR_RAMP(colors, factor, finalColor) { \
+    int index = 0; \
+    for(int i = 0; i < colors.length() - 1; i++){ \
+       ColorStop currentColor = colors[i]; \
+       bool isInBetween = currentColor.position <= factor; \
+       index = isInBetween ? i : index; \
+    } \
+    ColorStop currentColor = colors[index]; \
+    ColorStop nextColor = colors[index + 1]; \
+    float range = nextColor.position - currentColor.position; \
+    float lerpFactor = (factor - currentColor.position) / range; \
+    finalColor = mix(currentColor.color, nextColor.color, lerpFactor); \
+} \
 
 // kleinbuchstaben
 const float d = 45.;

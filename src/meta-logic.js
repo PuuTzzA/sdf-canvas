@@ -91,29 +91,146 @@ class MetaText extends AbstractMetaElement {
     }
 }
 
-// Three JS 
-export default class MetaCanvas {
-    constructor(smoothRadius = 15) {
-        this.container = document.getElementById("meta-container");
+export class ColorStop {
+    constructor(color, t) {
+        this.color = color;
+        this.t = t;
+    }
+}
 
-        this.loadShaders(smoothRadius);
+export class ColorRamp {
+    constructor() {
+        this.colorStops = [];
     }
 
-    async loadShaders(smoothRadius) {
+    static toEquallySpaced(colors) {
+        const colorRamp = new ColorRamp();
+        const spacing = 1 / (colors.length - 1);
+        for (let i = 0; i < colors.length; i++) {
+            colorRamp.colorStops.push(new ColorStop(colors[i], spacing * i));
+        }
+        return colorRamp;
+    }
+
+    append(colorStop) {
+        this.colorStops.push(colorStop);
+    }
+}
+
+export class MetaCanvas {
+    constructor({ smoothRadius = 15, gain = 2, contrast = 0.1, steps = 5, colorRamp = ColorRamp.toEquallySpaced([new THREE.Color("black"), new THREE.Color(0, 1, 0), new THREE.Color("white")]) }) {
+        this.container = document.getElementById("meta-container");
+        this.smoothRadius = smoothRadius;
+        this.gain = gain;
+        this.contrast = contrast;
+        this.steps = steps;
+        this.colorRamp = colorRamp;
+        this.loadShaders();
+    }
+
+    async loadShaders() {
         const responseVertex = await fetch("./src/shaders/vertex.glsl");
         const responseFragment = await fetch("./src/shaders/fragment.glsl");
 
         this.vertex = await responseVertex.text();
-        this.fragment = await responseFragment.text();
+        this.fragment_first = await responseFragment.text();
 
         this.metaElements = [];
         this.metaElementsMouse = [];
-        this.buildScene();
+        this.buildSceneSdf();
+        this.buildMain();
 
-        this.fragment +=
-            `
-void main() {
-    const vec2 subPixleOffsets[] = vec2[](
+        this.setupThree();
+    }
+
+    buildSceneSdf() {
+        this.fragment_sdf = "float sdfTotal(vec2 p) {\n";
+        this.fragment_sdf += "\tfloat s = 3.402823466e+38;\n";
+
+        let idCurrent = 0;
+
+        document.querySelectorAll(".meta-box").forEach(element => {
+            let box = new MetaBox(element, idCurrent);
+            this.metaElements.push(box);
+
+            if (element.hasAttribute("updateMouse")) {
+                this.metaElementsMouse.push(box);
+            }
+
+            this.fragment_sdf += "\ts = smin(sdBox(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 3) + "] / 2.),";
+            this.fragment_sdf += "vec2( array[" + (idCurrent + 2) + "] / 2., array[" + (idCurrent + 3) + "] / 2.)), s, smoothRadius);\n";
+
+            idCurrent += 4;
+        })
+
+        document.querySelectorAll(".meta-box-rounded").forEach(element => {
+            let box = new MetaBoxRounded(element, idCurrent);
+            this.metaElements.push(box);
+
+            if (element.hasAttribute("updateMouse")) {
+                this.metaElementsMouse.push(box);
+            }
+
+            this.fragment_sdf += "\ts = smin(sdRoundedBox(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 3) + "] / 2.),";
+            this.fragment_sdf += "vec2( array[" + (idCurrent + 2) + "] / 2., array[" + (idCurrent + 3) + "] / 2.), vec4(array[" + (idCurrent + 4) + "])), s, smoothRadius);\n";
+
+            idCurrent += 5;
+        })
+
+        document.querySelectorAll(".meta-circle").forEach(element => {
+            let box = new MetaCircle(element, idCurrent);
+            this.metaElements.push(box);
+
+            if (element.hasAttribute("updateMouse")) {
+                this.metaElementsMouse.push(box);
+            }
+
+            this.fragment_sdf += "\ts = smin(sdCircle(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 2) + "] / 2.), array[" + (idCurrent + 2) + "] / 2.), s, smoothRadius);\n";
+
+            idCurrent += 3;
+        })
+
+        document.querySelectorAll(".meta-text").forEach(element => {
+            let box = new MetaText(element, idCurrent);
+            this.metaElements.push(box);
+
+            if (element.hasAttribute("updateMouse")) {
+                this.metaElementsMouse.push(box);
+            }
+
+            const string = element.innerHTML;
+            const scale = (900 / element.offsetHeight).toFixed(6);
+            let advanceCurrent = 0;
+            this.fragment_sdf += "\tfloat text" + idCurrent + " = 3.402823466e+38;\n";
+
+            for (let i = 0; i < string.length; i++) {
+                const char = string.charAt(i);
+                if (char in MetaText.letters) {
+
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
+                    advanceCurrent += MetaText.letters[char].advance;
+                } else if (char == " ") {
+                    advanceCurrent += 180;
+                } else {
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(sdNotDefined(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
+                    advanceCurrent += 180;
+                }
+            }
+
+            this.fragment_sdf += "\ts = smin(text" + idCurrent + ", s, smoothRadius);\n";
+            idCurrent += 2;
+        })
+
+        this.fragment_sdf = "uniform float[" + idCurrent + "] array;\n" + this.fragment_sdf;
+        this.fragment_sdf += "\treturn s;\n}"
+        this.arraySize = idCurrent;
+    }
+
+    buildMain() {
+        this.fragment_main =
+            `         
+void main() { 
+    const vec2 subPixleOffsets[] = vec2[]( 
         vec2(0.375,0.125)-vec2(0.5),
         vec2(0.875,0.375)-vec2(0.5),
         vec2(0.125,0.625)-vec2(0.5),
@@ -131,14 +248,31 @@ void main() {
     }
 
     sdfSum /= float(subPixleOffsets.length());
-    sdfSum *= 2.;
+    sdfSum += gain;
+    sdfSum *= contrast;
 
-    gl_FragColor = mix(vec4(vec3(1.), 1.), vec4(vec3(0.), 1.), sdfSum);
+    sdfSum = floor(sdfSum * steps) / steps;
+
+    ColorStop[] colors = ColorStop[](
+`;
+        for (let i = 0; i < this.colorRamp.colorStops.length; i++) {
+            const e = this.colorRamp.colorStops[i];
+            this.fragment_main += "\t\t\tColorStop(vec3(" + e.color.r.toFixed(6) + ", " + e.color.g.toFixed(6) + ", " + e.color.b.toFixed(6) + "), " + e.t.toFixed(6) + ")";
+            if (i != this.colorRamp.colorStops.length - 1) {
+                this.fragment_main += ",\n";
+            }
+        };
+
+        this.fragment_main +=
+            `);
+    vec3 finalColor;
+    COLOR_RAMP(colors, sdfSum, finalColor);
+
+    gl_FragColor = vec4(finalColor, 1.);
 }`;
-        this.setupThree(smoothRadius);
     }
 
-    setupThree(smoothRadius) {
+    setupThree() {
         this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -1000, 1000);
         this.camera.position.z = 1;
 
@@ -148,12 +282,15 @@ void main() {
         const uniforms = {
             resolution: { type: "vec2", value: new THREE.Vector2() },
             time: { type: "float", value: 0 },
-            smoothRadius: { type: "float", value: smoothRadius / 4 },
+            smoothRadius: { type: "float", value: this.smoothRadius / 4 },
+            gain: { type: "float", value: this.gain },
+            contrast: { type: "float", value: this.contrast },
+            steps: { type: "float", value: this.steps },
             array: { value: new Float32Array(this.arraySize) }
         };
 
         this.material = new THREE.ShaderMaterial({
-            fragmentShader: this.fragment,
+            fragmentShader: this.fragment_first + this.fragment_sdf + this.fragment_main,
             vertexShader: this.vertex,
             uniforms: uniforms,
         });
@@ -174,89 +311,6 @@ void main() {
         this.metaElements.forEach(e => e.update(this.material.uniforms.array.value));
 
         this.render();
-    }
-
-    buildScene() {
-        this.fragment += "float sdfTotal(vec2 p) {\n";
-        this.fragment += "\tfloat s = 3.402823466e+38;\n";
-
-        let idCurrent = 0;
-
-        document.querySelectorAll(".meta-box").forEach(element => {
-            let box = new MetaBox(element, idCurrent);
-            this.metaElements.push(box);
-
-            if (element.hasAttribute("updateMouse")) {
-                this.metaElementsMouse.push(box);
-            }
-
-            this.fragment += "\ts = smin(sdBox(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 3) + "] / 2.),";
-            this.fragment += "vec2( array[" + (idCurrent + 2) + "] / 2., array[" + (idCurrent + 3) + "] / 2.)), s, smoothRadius);\n";
-
-            idCurrent += 4;
-        })
-
-        document.querySelectorAll(".meta-box-rounded").forEach(element => {
-            let box = new MetaBoxRounded(element, idCurrent);
-            this.metaElements.push(box);
-
-            if (element.hasAttribute("updateMouse")) {
-                this.metaElementsMouse.push(box);
-            }
-
-            this.fragment += "\ts = smin(sdRoundedBox(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 3) + "] / 2.),";
-            this.fragment += "vec2( array[" + (idCurrent + 2) + "] / 2., array[" + (idCurrent + 3) + "] / 2.), vec4(array[" + (idCurrent + 4) + "])), s, smoothRadius);\n";
-
-            idCurrent += 5;
-        })
-
-        document.querySelectorAll(".meta-circle").forEach(element => {
-            let box = new MetaCircle(element, idCurrent);
-            this.metaElements.push(box);
-
-            if (element.hasAttribute("updateMouse")) {
-                this.metaElementsMouse.push(box);
-            }
-
-            this.fragment += "\ts = smin(sdCircle(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 2) + "] / 2.), array[" + (idCurrent + 2) + "] / 2.), s, smoothRadius);\n";
-
-            idCurrent += 3;
-        })
-
-        document.querySelectorAll(".meta-text").forEach(element => {
-            let box = new MetaText(element, idCurrent);
-            this.metaElements.push(box);
-
-            if (element.hasAttribute("updateMouse")) {
-                this.metaElementsMouse.push(box);
-            }
-
-            const string = element.innerHTML;
-            const scale = (900 / element.offsetHeight).toFixed(6);
-            let advanceCurrent = 0;
-            this.fragment += "\tfloat text" + idCurrent + " = 3.402823466e+38;\n";
-
-            for (let i = 0; i < string.length; i++) {
-                const char = string.charAt(i);
-                if (char in MetaText.letters) {
-
-                    this.fragment += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
-                    advanceCurrent += MetaText.letters[char].advance;
-                } else if (char == " ") {
-                    advanceCurrent += 180;
-                } else {
-                    this.fragment += "\ttext" + idCurrent + " = smin(sdNotDefined(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
-                    advanceCurrent += 180;
-                }
-            }
-
-            this.fragment += "\ts = smin(text" + idCurrent + ", s, smoothRadius);\n";
-            idCurrent += 2;
-        })
-
-        this.fragment = "uniform float[" + idCurrent + "] array;\n" + this.fragment;
-        this.fragment += "\treturn s;\n}"
-        this.arraySize = idCurrent;
     }
 
     render(timeStamp) {
@@ -292,5 +346,47 @@ void main() {
 
     setSmoothRadius(r) {
         this.material.uniforms.smoothRadius.value = r / 4;
+        this.smoothRadius = r;
+    }
+
+    setGain(g) {
+        this.material.uniforms.gain.value = g;
+        this.gain = g;
+    }
+
+    setContrast(c) {
+        this.material.uniforms.contrast.value = c;
+        this.contrast = c;
+    }
+
+    setSteps(s) {
+        this.material.uniforms.steps.value = s;
+        this.steps = s;
+    }
+
+    setColorRamp(colorRamp) {
+        this.colorRamp = colorRamp;
+        this.buildMain(colorRamp);
+
+        console.log(this.fragment_first + this.fragment_sdf + this.fragment_main);
+
+        const uniforms = {
+            resolution: { type: "vec2", value: new THREE.Vector2() },
+            time: { type: "float", value: 0 },
+            smoothRadius: { type: "float", value: this.smoothRadius / 4 },
+            gain: { type: "float", value: this.gain },
+            contrast: { type: "float", value: this.contrast },
+            steps: { type: "float", value: this.steps },
+            array: { value: new Float32Array(this.arraySize) }
+        };
+
+        this.material = new THREE.ShaderMaterial({
+            fragmentShader: this.fragment_first + this.fragment_sdf + this.fragment_main,
+            vertexShader: this.vertex,
+            uniforms: uniforms,
+        });
+        
+        this.mesh.material = this.material;
+        this.resize();
     }
 }
