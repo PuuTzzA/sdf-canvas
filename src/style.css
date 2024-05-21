@@ -1,10 +1,15 @@
+:root {
+    --color-debug: rgba(255, 0, 0, 0.2);
+}
+
+@font-face {
+    font-family: metaballs;
+    src: url(fonts/metaball_font_.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;
-}
-
-body {
-    overscroll-behavior: none;
 }
 
 #container {
@@ -41,22 +46,25 @@ canvas {
     bottom: 10%;
 }
 
-#test-text{
+#test-text {
     font-size: 1000px;
     margin-left: 50%;
     margin-top: 10rem;
 }
 
-
-@font-face {
-    font-family: metaballs;
-    src: url(fonts/metaball_font_.ttf);
-}
-
-.meta-text{
+.meta-text {
     font-family: metaballs;
     white-space: nowrap;
     width: max-content;
     color: rgba(255, 0, 0, 0.308);
     vertical-align: baseline;
+}
+
+#circle {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: 10%;
+    background-color: red;
+    border-radius: 50%;
 }

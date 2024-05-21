@@ -244,6 +244,10 @@ float sdz(in vec2 p) {
     return c;
 }
 
+float sdNotDefined(in vec2 p) {
+    return sdRoundedBox(p + vec2(d * 1.5, -350.), vec2(d * 1.5, 350.), vec4(d / 2.));
+}
+
 // testing
 const vec2 scale = 3500. * vec2(-1., 1.);
 

@@ -71,6 +71,17 @@ class MetaBoxRounded extends AbstractMetaElement {
     }
 }
 
+class MetaCircle extends AbstractMetaElement {
+    update(array) {
+        // array[0] = x position
+        // array[1] = y position (bottom)
+        // array[2] = radius (height)
+        array[this.id + 0] = this.element.getBoundingClientRect().left;
+        array[this.id + 1] = this.element.getBoundingClientRect().top;
+        array[this.id + 2] = this.element.offsetHeight;
+    }
+}
+
 class MetaText extends AbstractMetaElement {
     static letters = {
         "a": { function: "sda", advance: 180 },
@@ -184,6 +195,15 @@ class Sketch {
             idCurrent += 5;
         })
 
+        document.querySelectorAll(".meta-circle").forEach(element => {
+            let box = new MetaCircle(element, idCurrent);
+            this.metaElements.push(box);
+
+            this.fragment_sdf += "\ts = smin(sdCircle(p - vec2(array[" + idCurrent + "] + array[" + (idCurrent + 2) + "] / 2., array [" + (idCurrent + 1) + "] + array[" + (idCurrent + 2) + "] / 2.), array[" + (idCurrent + 2) + "] / 2.), s, d / 8.);\n";
+
+            idCurrent += 3;
+        })
+
         document.querySelectorAll(".meta-text").forEach(element => {
             let box = new MetaText(element, idCurrent);
             this.metaElements.push(box);
@@ -191,15 +211,16 @@ class Sketch {
             const string = element.innerHTML;
             const scale = (900 / element.offsetHeight).toFixed(6);
             let advanceCurrent = 0;
-            this.fragment_sdf  += "\tfloat text" + idCurrent + " = 3.402823466e+38;\n";
+            this.fragment_sdf += "\tfloat text" + idCurrent + " = 3.402823466e+38;\n";
 
             for (let i = 0; i < string.length; i++) {
                 const char = string.charAt(i);
                 if (char in MetaText.letters) {
 
-                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - "+  (200 / scale).toFixed(6) +")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
                     advanceCurrent += MetaText.letters[char].advance;
                 } else {
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(sdNotDefined(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
                     advanceCurrent += 180;
                 }
             }
