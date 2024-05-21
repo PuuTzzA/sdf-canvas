@@ -16,12 +16,12 @@ body{
     height: 20rem;
 
     position: absolute;
-    top: 10px;
+    top: 3rem;
     left: 10%;
 }
 
 #test-box-2 {
-    width: 10rem;
+    width: 3rem;
     height: 20rem;
 
     position: absolute;
@@ -39,6 +39,7 @@ body{
     width: 100px;
     height: 100px;
     position: absolute;
+    left: 5%;
     bottom: 10%;
     border-radius: 50%;
 }
