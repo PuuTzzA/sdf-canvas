@@ -86,8 +86,10 @@ class MetaText extends AbstractMetaElement {
     update(array) {
         // array[0] = x position
         // array[1] = y position (bottom)
+        // array[3] = scale
         array[this.id + 0] = this.element.getBoundingClientRect().left;
         array[this.id + 1] = this.element.getBoundingClientRect().top + this.element.offsetHeight;
+        array[this.id + 2] = (900 / this.element.offsetHeight).toFixed(8);
     }
 }
 
@@ -211,18 +213,18 @@ export class MetaCanvas {
                 const char = string.charAt(i);
                 if (char in MetaText.letters) {
 
-                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(" + MetaText.letters[char].function + "(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + "(200. / array[" + (idCurrent + 2) + "]))) * - array[" + (idCurrent + 2) + "]) + vec2(" + advanceCurrent.toFixed(6) + ", 0.)) / array[" + (idCurrent + 2) + "], text" + idCurrent + ", d / 8. / array[" + (idCurrent + 2) + "]);\n";
                     advanceCurrent += MetaText.letters[char].advance;
                 } else if (char == " ") {
                     advanceCurrent += 180;
                 } else {
-                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(sdNotDefined(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - " + (200 / scale).toFixed(6) + ")) * -" + scale + ") + vec2 (" + advanceCurrent.toFixed(6) + ", 0.)) / " + scale + ", text" + idCurrent + ", d / 8. / " + scale + ");\n";
+                    this.fragment_sdf += "\ttext" + idCurrent + " = smin(sdNotDefined(((p - vec2(array[" + idCurrent + "], array[" + (idCurrent + 1) + "] - (200. / array[" + (idCurrent + 2) + "]))) * - array[" + (idCurrent + 2) + "]) + vec2(" + advanceCurrent.toFixed(6) + ", 0.)) / array[" + (idCurrent + 2) + "], text" + idCurrent + ", d / 8. / array[" + (idCurrent + 2) + "]);\n";
                     advanceCurrent += 180;
                 }
             }
 
             this.fragment_sdf += "\ts = smin(text" + idCurrent + ", s, smoothRadius);\n";
-            idCurrent += 2;
+            idCurrent += 3;
         })
 
         this.fragment_sdf = "uniform float[" + idCurrent + "] array;\n" + this.fragment_sdf;

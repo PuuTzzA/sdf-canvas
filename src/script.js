@@ -1,5 +1,7 @@
-import {MetaCanvas, ColorRamp, ColorStop} from "./meta-logic.js";
+import { MetaCanvas, ColorRamp, ColorStop } from "./meta-logic.js";
 import * as THREE from 'three';
+
+const roundedBox = document.getElementById("test-box-2");
 
 document.addEventListener("mousemove", (e) => {
     const follower = document.getElementById("cursor");
@@ -32,7 +34,7 @@ const colorRamps = [
     ColorRamp.toEquallySpaced([new THREE.Color("rgb(255, 0, 0)"), new THREE.Color(0x00ff00), new THREE.Color(0, 0, 1)]),
     new ColorRamp([new ColorStop(new THREE.Color("rgb(0, 0, 255)"), 0), new ColorStop(new THREE.Color("rgb(0, 255, 0)"), 1)]),
     new ColorRamp([new ColorStop(new THREE.Color(0x000022), 0), new ColorStop(new THREE.Color(0x160870), 0.3), new ColorStop(new THREE.Color(0xcafbaf), 0.4),
-        new ColorStop(new THREE.Color(0xfe32e9), 0.6), new ColorStop(new THREE.Color(0xff0006), 0.8), new ColorStop(new THREE.Color(0x160870), 0.9), new ColorStop(new THREE.Color(0x000022), 1)])
+    new ColorStop(new THREE.Color(0xfe32e9), 0.6), new ColorStop(new THREE.Color(0xff0006), 0.8), new ColorStop(new THREE.Color(0x160870), 0.9), new ColorStop(new THREE.Color(0x000022), 1)])
 ];
 
 let currentColorRamp = 0;
@@ -42,4 +44,4 @@ document.getElementById("colors").addEventListener("click", e => {
     console.log("moin");
 })
 
-const metaCanvas = new MetaCanvas({smoothRadius: 250, gain: 0, contrast: 0.1, steps: 500, colorRamp: colorRamps[3]})
+const metaCanvas = new MetaCanvas({ smoothRadius: 250, gain: 0, contrast: 0.1, steps: 500, colorRamp: colorRamps[3] })
