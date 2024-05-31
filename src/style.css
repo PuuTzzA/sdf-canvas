@@ -35,10 +35,10 @@ body{
     margin-top: 10rem;
 }
 
-#test-text:hover{
+/* #test-text:hover{
     font-size: 50rem;
     margin-top: 20rem;
-}
+} */
 
 #circle {
     width: 100px;
