@@ -15,7 +15,7 @@ In your HTML-Document create a div with id _meta-container_, where the canvas wi
 ```html
     <div id="meta-container"></div>
 ```
-... and include [Three.js](https://threejs.org/) and the meta-logig.js file.
+... and include [Three.js](https://threejs.org/) and the meta-logic.js file.
 
 ```html
     <script type="importmap">
