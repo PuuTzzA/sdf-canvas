@@ -49,7 +49,7 @@ class MetaCircle extends AbstractMetaElement {
         // array[2] = radius (height)
         array[this.id + 0] = this.element.getBoundingClientRect().left;
         array[this.id + 1] = this.element.getBoundingClientRect().top;
-        array[this.id + 2] = this.element.offsetHeight;
+        array[this.id + 2] = this.element.offsetWidth;
     }
 }
 
@@ -348,6 +348,10 @@ void main() {
 
     mouseMove() {
         this.metaElementsMouse.forEach(e => e.update(this.material.uniforms.array.value));
+    }
+
+    update() {
+        this.metaElements.forEach(e => e.update(this.material.uniforms.array.value));
     }
 
     setSmoothRadius(r) {

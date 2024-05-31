@@ -44,4 +44,4 @@ document.getElementById("colors").addEventListener("click", e => {
     console.log("moin");
 })
 
-const metaCanvas = new MetaCanvas({ smoothRadius: 250, gain: 0, contrast: 0.1, steps: 500, colorRamp: colorRamps[3] })
+const metaCanvas = new MetaCanvas({ smoothRadius: 45, gain: 0, contrast: 0.1, steps: 500, colorRamp: colorRamps[3] })
