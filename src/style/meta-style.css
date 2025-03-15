@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: metaballs;
-    src: url(fonts/metaball_font_big.ttf);
+    src: url(../fonts/metaball_font_big.ttf);
 }
 
 * {
