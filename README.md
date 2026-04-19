@@ -1,3 +1,7 @@
+> [!WARNING]
+> **This project is deprecated and has been superseded by [SdfUi](https://github.com/PuuTzzA/sdf-ui).**  
+> SdfUi has more features and is better in every way. To achieve similar functionality as this package, simply use SdfUi with `twoDMode` enabled.
+
 # SDF-canvas
 inspired by [2024 MSI](https://www.youtube.com/watch?v=ETQ9LME7UzQ)
 
